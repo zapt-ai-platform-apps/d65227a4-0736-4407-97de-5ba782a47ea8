@@ -1,8 +1,8 @@
 import React, { useState } from 'react';
 import { FiSearch, FiGlobe } from 'react-icons/fi';
 import { useCloneContext } from '../context/CloneContext';
-import ErrorMessage from './ErrorMessage';
-import LoadingIndicator from './LoadingIndicator';
+import { ErrorMessage } from './ErrorMessage';
+import { LoadingIndicator } from './LoadingIndicator';
 
 const WebsiteSearch = () => {
   const [query, setQuery] = useState('');
