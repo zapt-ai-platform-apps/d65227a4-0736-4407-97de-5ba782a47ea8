@@ -1,11 +1,13 @@
 import React, { useState } from 'react';
 import { useCloneContext } from '../context/CloneContext';
-import { FiLink, FiClipboard } from 'react-icons/fi';
+import { FiLink, FiClipboard, FiSettings } from 'react-icons/fi';
+import CloneOptions from './CloneOptions';
 
 function CloneForm() {
   const [url, setUrl] = useState('');
   const [isValid, setIsValid] = useState(true);
-  const { cloneWebsite, isLoading } = useCloneContext();
+  const [showOptions, setShowOptions] = useState(false);
+  const { cloneWebsite, cloneOptions, updateCloneOptions, isLoading } = useCloneContext();
 
   const validateUrl = (value) => {
     try {
@@ -29,7 +31,7 @@ function CloneForm() {
     setIsValid(valid);
     
     if (valid) {
-      cloneWebsite(url);
+      cloneWebsite(url, cloneOptions);
     }
   };
 
@@ -48,6 +50,10 @@ function CloneForm() {
     } catch (err) {
       console.error('Failed to read clipboard:', err);
     }
+  };
+
+  const toggleOptions = () => {
+    setShowOptions(!showOptions);
   };
 
   return (
@@ -85,6 +91,28 @@ function CloneForm() {
             </p>
           )}
         </div>
+        
+        <div className="flex justify-between items-center mb-4">
+          <button 
+            type="button" 
+            onClick={toggleOptions}
+            className="text-sm text-blue-600 hover:text-blue-800 flex items-center space-x-1"
+          >
+            <FiSettings size={16} />
+            <span>{showOptions ? 'Hide Options' : 'Show Options'}</span>
+          </button>
+        </div>
+        
+        {showOptions && (
+          <div className="mb-4 p-3 bg-gray-50 rounded-md border border-gray-200">
+            <CloneOptions 
+              options={cloneOptions} 
+              onChange={updateCloneOptions} 
+              disabled={isLoading}
+            />
+          </div>
+        )}
+        
         <button 
           type="submit" 
           className="btn-primary w-full"

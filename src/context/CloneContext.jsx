@@ -9,6 +9,11 @@ export function CloneProvider({ children }) {
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState('');
   const [history, setHistory] = useState([]);
+  const [cloneOptions, setCloneOptions] = useState({
+    includeStyles: true,
+    includeScripts: false,
+    includeImages: true
+  });
 
   // Initialize history from localStorage
   useEffect(() => {
@@ -37,45 +42,46 @@ export function CloneProvider({ children }) {
     }
   }, [history]);
 
-  const cloneWebsite = async (url) => {
+  const cloneWebsite = async (url, options = cloneOptions) => {
     setIsLoading(true);
     setError('');
     setClonedContent('');
     
     try {
-      console.log(`Cloning website: ${url}`);
+      console.log(`Cloning website: ${url} with options:`, options);
       
       // Call our API endpoint
-      const response = await fetch('/api/clone', {
+      const response = await fetch('/api/clone-website', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
         },
-        body: JSON.stringify({ url }),
+        body: JSON.stringify({ url, options }),
       });
       
       if (!response.ok) {
-        let errorData = { message: 'Failed to clone website' };
+        let errorData = { error: 'Failed to clone website' };
         try {
           errorData = await response.json();
         } catch (e) {
           // If parsing fails, use status text
-          errorData.message = response.statusText || errorData.message;
+          errorData.error = response.statusText || errorData.error;
         }
         
-        throw new Error(errorData.message || 'Failed to clone website');
+        throw new Error(errorData.error || 'Failed to clone website');
       }
       
       const data = await response.json();
       console.log('Successfully cloned website');
       
-      setClonedContent(data.html);
+      setClonedContent(data.content);
       setClonedUrl(url);
       
       // Add to history
       const newHistoryItem = {
         url,
         timestamp: new Date().toISOString(),
+        options: { ...options }
       };
       
       setHistory(prev => {
@@ -90,11 +96,18 @@ export function CloneProvider({ children }) {
       setError(err.message || 'Failed to clone website');
       
       Sentry.captureException(err, {
-        extra: { url, context: 'Cloning website' }
+        extra: { url, options, context: 'Cloning website' }
       });
     } finally {
       setIsLoading(false);
     }
+  };
+
+  const updateCloneOptions = (newOptions) => {
+    setCloneOptions(prev => ({
+      ...prev,
+      ...newOptions
+    }));
   };
 
   const value = {
@@ -103,7 +116,9 @@ export function CloneProvider({ children }) {
     isLoading,
     error,
     history,
+    cloneOptions,
     cloneWebsite,
+    updateCloneOptions
   };
 
   return (

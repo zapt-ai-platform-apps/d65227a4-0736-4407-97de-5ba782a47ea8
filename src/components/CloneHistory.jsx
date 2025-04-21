@@ -1,6 +1,6 @@
 import React from 'react';
 import { useCloneContext } from '../context/CloneContext';
-import { FiExternalLink, FiClock } from 'react-icons/fi';
+import { FiExternalLink, FiClock, FiRefreshCw } from 'react-icons/fi';
 
 function CloneHistory() {
   const { history, cloneWebsite } = useCloneContext();
@@ -8,6 +8,10 @@ function CloneHistory() {
   if (!history || history.length === 0) {
     return null;
   }
+
+  const handleReclone = (item) => {
+    cloneWebsite(item.url, item.options || undefined);
+  };
 
   return (
     <div className="card p-6">
@@ -21,13 +25,22 @@ function CloneHistory() {
           <li key={index} className="py-3">
             <div className="flex justify-between items-center">
               <div className="flex-1 truncate">
-                <button 
-                  onClick={() => cloneWebsite(item.url)}
-                  className="text-blue-600 hover:text-blue-800 hover:underline font-medium truncate max-w-full inline-block"
-                  title={item.url}
-                >
-                  {item.url}
-                </button>
+                <div className="flex items-center">
+                  <button 
+                    onClick={() => handleReclone(item)}
+                    className="text-blue-600 hover:text-blue-800 hover:underline font-medium truncate max-w-full inline-block"
+                    title={item.url}
+                  >
+                    {item.url}
+                  </button>
+                  <button
+                    onClick={() => handleReclone(item)}
+                    className="ml-2 text-gray-500 hover:text-blue-600 cursor-pointer"
+                    title="Clone again with same options"
+                  >
+                    <FiRefreshCw size={14} />
+                  </button>
+                </div>
                 <p className="text-xs text-gray-500">
                   {new Date(item.timestamp).toLocaleString()}
                 </p>

@@ -1,10 +1,13 @@
-import React, { useRef, useEffect } from 'react';
+import React, { useRef, useEffect, useState } from 'react';
 import { useCloneContext } from '../context/CloneContext';
 import { Oval } from 'react-loader-spinner';
+import { FiMaximize2, FiMinimize2 } from 'react-icons/fi';
 
 function ClonePreview() {
   const { clonedContent, isLoading, error, clonedUrl } = useCloneContext();
   const iframeRef = useRef(null);
+  const [isFullscreen, setIsFullscreen] = useState(false);
+  const [iframeHeight, setIframeHeight] = useState(600);
 
   useEffect(() => {
     if (clonedContent && iframeRef.current) {
@@ -15,8 +18,37 @@ function ClonePreview() {
       iframeDoc.open();
       iframeDoc.write(clonedContent);
       iframeDoc.close();
+      
+      // Attempt to adjust iframe height after content loads
+      const adjustHeight = () => {
+        try {
+          if (iframe && iframe.contentWindow.document.body) {
+            const height = iframe.contentWindow.document.body.scrollHeight;
+            if (height > 300) {
+              setIframeHeight(height);
+            }
+          }
+        } catch (err) {
+          console.error("Failed to adjust iframe height:", err);
+        }
+      };
+      
+      setTimeout(adjustHeight, 500);
+      iframe.onload = adjustHeight;
     }
   }, [clonedContent]);
+
+  const toggleFullscreen = () => {
+    setIsFullscreen(!isFullscreen);
+  };
+
+  const previewClasses = isFullscreen ? 
+    "fixed inset-0 z-50 bg-white p-4" : 
+    "card";
+
+  const iframeClasses = isFullscreen ?
+    "w-full h-[calc(100vh-120px)]" :
+    "clone-frame";
 
   if (error) {
     return (
@@ -31,14 +63,23 @@ function ClonePreview() {
   }
 
   return (
-    <div className="card">
-      <div className="p-4 border-b border-gray-200">
+    <div className={previewClasses}>
+      <div className="p-4 border-b border-gray-200 flex justify-between items-center">
         <h2 className="text-xl font-bold text-gray-800">
           {clonedUrl ? `Preview: ${clonedUrl}` : 'Website Preview'}
         </h2>
+        {clonedContent && !isLoading && (
+          <button
+            onClick={toggleFullscreen}
+            className="p-2 text-gray-600 hover:text-blue-600 rounded-full hover:bg-gray-100 cursor-pointer"
+            title={isFullscreen ? "Exit fullscreen" : "View fullscreen"}
+          >
+            {isFullscreen ? <FiMinimize2 size={20} /> : <FiMaximize2 size={20} />}
+          </button>
+        )}
       </div>
       
-      <div className="clone-preview-container">
+      <div className="clone-preview-container" style={{ height: isFullscreen ? 'calc(100vh - 120px)' : 'auto' }}>
         {isLoading && (
           <div className="loading-overlay">
             <Oval
@@ -64,11 +105,23 @@ function ClonePreview() {
           <iframe 
             ref={iframeRef}
             title="Cloned Website Preview"
-            className="clone-frame"
+            className={iframeClasses}
+            style={{ height: iframeHeight }}
             sandbox="allow-same-origin"
           />
         )}
       </div>
+      
+      {isFullscreen && (
+        <div className="p-4 border-t border-gray-200">
+          <button
+            onClick={toggleFullscreen}
+            className="btn-secondary"
+          >
+            Exit Fullscreen
+          </button>
+        </div>
+      )}
     </div>
   );
 }
