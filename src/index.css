@@ -2,96 +2,54 @@
 @tailwind components;
 @tailwind utilities;
 
-@layer components {
-  .input-field {
-    @apply w-full px-4 py-2 rounded-md border border-gray-300 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition duration-200 box-border;
-  }
-  
-  .btn {
-    @apply px-6 py-2 rounded-md font-medium transition duration-200 cursor-pointer;
-  }
-  
-  .btn-primary {
-    @apply btn bg-blue-600 text-white hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2;
-  }
-  
-  .btn-secondary {
-    @apply btn bg-gray-200 text-gray-800 hover:bg-gray-300 focus:outline-none focus:ring-2 focus:ring-gray-400 focus:ring-offset-2;
-  }
-  
-  .card {
-    @apply bg-white rounded-lg shadow-md overflow-hidden;
-  }
+:root {
+  --primary-color: #3b82f6;
+  --secondary-color: #2563eb;
+  --text-color: #111827;
+  --bg-color: #f9fafb;
+  --card-color: #ffffff;
+  --border-color: #e5e7eb;
 }
 
-.clone-frame {
-  border: 0;
-  width: 100%;
-  height: 100%;
-  min-height: 500px;
+html {
+  @apply h-full;
 }
 
-.clone-preview-container {
-  position: relative;
-  min-height: 500px;
-  height: 100%;
-  background-color: #f8f9fa;
-  border-radius: 0.5rem;
-  overflow: hidden;
+body {
+  @apply h-full bg-gray-50 text-gray-900;
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
 }
 
-.loading-overlay {
-  position: absolute;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  background: rgba(255, 255, 255, 0.8);
-  z-index: 10;
+#root {
+  @apply h-full;
 }
 
-/* Tooltip for truncated URLs */
-.tooltip {
-  position: relative;
-  display: inline-block;
+.input-field {
+  @apply w-full px-4 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 box-border;
 }
 
-.tooltip:hover .tooltip-text {
-  visibility: visible;
-  opacity: 1;
+.btn-primary {
+  @apply bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-md shadow-sm font-medium disabled:opacity-50 disabled:cursor-not-allowed cursor-pointer;
 }
 
-.tooltip-text {
-  visibility: hidden;
-  opacity: 0;
-  width: auto;
-  max-width: 300px;
-  background-color: #333;
-  color: #fff;
-  text-align: center;
-  border-radius: 6px;
-  padding: 5px 10px;
-  position: absolute;
-  z-index: 1;
-  bottom: 125%;
-  left: 50%;
-  transform: translateX(-50%);
-  transition: opacity 0.3s;
-  white-space: nowrap;
-  overflow: hidden;
-  text-overflow: ellipsis;
+.btn-sm {
+  @apply px-3 py-1 text-sm font-medium rounded shadow-sm cursor-pointer;
 }
 
-.tooltip-text::after {
-  content: "";
-  position: absolute;
-  top: 100%;
-  left: 50%;
-  margin-left: -5px;
-  border-width: 5px;
-  border-style: solid;
-  border-color: #333 transparent transparent transparent;
+.card {
+  @apply bg-white rounded-lg shadow-md overflow-hidden border border-gray-200;
+}
+
+.zapt-badge {
+  @apply fixed bottom-4 right-4 px-3 py-1 text-sm font-medium bg-blue-600 text-white rounded-md shadow-md z-50;
+}
+
+.cloned-website-iframe {
+  @apply w-full h-full border-0;
+  min-height: 600px;
+}
+
+.preview-iframe {
+  @apply w-full h-full border-0 pointer-events-none;
+  min-height: 200px;
 }

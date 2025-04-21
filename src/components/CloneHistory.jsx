@@ -1,63 +1,58 @@
 import React from 'react';
+import { FiExternalLink, FiClock } from 'react-icons/fi';
 import { useCloneContext } from '../context/CloneContext';
-import { FiExternalLink, FiClock, FiRefreshCw } from 'react-icons/fi';
 
 function CloneHistory() {
   const { history, cloneWebsite } = useCloneContext();
 
   if (!history || history.length === 0) {
-    return null;
+    return (
+      <div className="card p-6">
+        <p className="text-gray-500 text-center">No cloning history yet</p>
+      </div>
+    );
   }
 
-  const handleReclone = (item) => {
-    cloneWebsite(item.url, item.options || undefined);
+  const formatDate = (dateString) => {
+    const date = new Date(dateString);
+    return date.toLocaleString();
   };
 
   return (
     <div className="card p-6">
-      <div className="flex items-center mb-4">
-        <FiClock className="text-gray-500 mr-2" />
-        <h2 className="text-xl font-bold text-gray-800">Recent Clones</h2>
-      </div>
-      
-      <ul className="divide-y divide-gray-200">
+      <h2 className="text-xl font-bold text-gray-800 mb-4">Recently Cloned Websites</h2>
+      <div className="space-y-3">
         {history.map((item, index) => (
-          <li key={index} className="py-3">
-            <div className="flex justify-between items-center">
-              <div className="flex-1 truncate">
-                <div className="flex items-center">
-                  <button 
-                    onClick={() => handleReclone(item)}
-                    className="text-blue-600 hover:text-blue-800 hover:underline font-medium truncate max-w-full inline-block"
-                    title={item.url}
-                  >
-                    {item.url}
-                  </button>
-                  <button
-                    onClick={() => handleReclone(item)}
-                    className="ml-2 text-gray-500 hover:text-blue-600 cursor-pointer"
-                    title="Clone again with same options"
-                  >
-                    <FiRefreshCw size={14} />
-                  </button>
+          <div key={index} className="p-3 border rounded hover:bg-gray-50">
+            <div className="flex justify-between items-start">
+              <div>
+                <h3 className="font-medium text-blue-600 truncate">{item.url}</h3>
+                <div className="flex items-center text-xs text-gray-500 mt-1">
+                  <FiClock className="mr-1" /> 
+                  {formatDate(item.timestamp)}
                 </div>
-                <p className="text-xs text-gray-500">
-                  {new Date(item.timestamp).toLocaleString()}
-                </p>
               </div>
-              <a
-                href={item.url}
-                target="_blank"
-                rel="noopener noreferrer"
-                className="ml-2 text-gray-500 hover:text-gray-700"
-                title="Open original site"
+              <button
+                onClick={() => cloneWebsite(item.url, item.options)}
+                className="btn-sm bg-blue-500 hover:bg-blue-600 text-white px-3 py-1 rounded cursor-pointer"
               >
-                <FiExternalLink />
-              </a>
+                <FiExternalLink className="inline mr-1" /> Clone Again
+              </button>
             </div>
-          </li>
+            <div className="mt-2 text-xs">
+              <span className={`mr-2 px-2 py-1 rounded ${item.options.includeStyles ? 'bg-green-100 text-green-800' : 'bg-gray-100 text-gray-800'}`}>
+                CSS: {item.options.includeStyles ? 'On' : 'Off'}
+              </span>
+              <span className={`mr-2 px-2 py-1 rounded ${item.options.includeScripts ? 'bg-green-100 text-green-800' : 'bg-gray-100 text-gray-800'}`}>
+                JS: {item.options.includeScripts ? 'On' : 'Off'}
+              </span>
+              <span className={`mr-2 px-2 py-1 rounded ${item.options.includeImages ? 'bg-green-100 text-green-800' : 'bg-gray-100 text-gray-800'}`}>
+                Images: {item.options.includeImages ? 'On' : 'Off'}
+              </span>
+            </div>
+          </div>
         ))}
-      </ul>
+      </div>
     </div>
   );
 }
