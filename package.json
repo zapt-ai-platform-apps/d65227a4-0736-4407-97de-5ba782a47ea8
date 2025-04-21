@@ -1,7 +1,7 @@
 {
     "name": "website-cloner",
     "version": "1.0.0",
-    "description": "A tool to clone any website's appearance and structure",
+    "description": "Website cloning application that copies every detail about another website",
     "type": "module",
     "scripts": {
         "dev": "vite",
@@ -14,10 +14,11 @@
         "@sentry/node": "^8.54.0",
         "axios": "^1.6.8",
         "cheerio": "^1.0.0-rc.12",
+        "html-react-parser": "^5.1.8",
         "react": "^18.2.0",
         "react-dom": "^18.2.0",
-        "react-icons": "^5.0.1",
-        "react-loader-spinner": "^6.1.6"
+        "react-icons": "^5.2.0",
+        "react-router-dom": "^6.23.0"
     },
     "devDependencies": {
         "@vitejs/plugin-react": "^4.3.4",

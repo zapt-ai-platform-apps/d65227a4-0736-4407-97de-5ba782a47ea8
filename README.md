@@ -1,52 +1,44 @@
 # Website Cloner
 
-A web application that allows you to clone the appearance and structure of any website by providing its URL. The app fetches the target website's content, processes it to fix relative URLs, and displays the cloned version within the application.
+A web application that allows users to clone websites by providing a URL. The app fetches the website content and displays it within the application, allowing users to save, download, and share cloned websites.
 
 ## Features
 
-- Clone any publicly accessible website
-- Display the cloned website in a preview panel
-- Track history of recently cloned websites
-- Mobile responsive design
-- PWA support for installation on devices
+- Clone any website by entering its URL
+- View cloned websites with preserved styling and content
+- Save favorite cloned websites for later access
+- Download cloned websites as HTML files
+- Share cloned websites with others
+- Mobile-responsive interface
+- Search through saved websites
 
-## How It Works
+## Technologies Used
 
-1. Enter a URL in the input field
-2. The application sends a request to a server-side API
-3. The API fetches the website's HTML content
-4. The content is processed to fix relative URLs and make them absolute
-5. The cloned website is displayed in the preview panel
-
-## Technical Details
-
-- React frontend with Tailwind CSS for styling
-- Server-side API to bypass CORS restrictions
-- Cheerio for HTML parsing and manipulation
-- Client-side storage to maintain history of cloned sites
-
-## Usage Considerations
-
-This application is intended for educational purposes only. Please respect copyright laws and the terms of service of websites you clone. Do not use this tool to:
-
-- Impersonate other websites
-- Create phishing sites
-- Steal content or design without permission
-- Violate any laws or terms of service
+- React.js with Hooks for frontend
+- React Router for navigation
+- Tailwind CSS for styling
+- LocalStorage for client-side data persistence
+- Axios for HTTP requests
+- Cheerio for HTML parsing
+- HTML React Parser for rendering parsed HTML
 
 ## Getting Started
 
-```bash
-# Install dependencies
-npm install
+1. Clone the repository
+2. Install dependencies with `npm install`
+3. Start the development server with `npm run dev`
+4. Open your browser to `http://localhost:5173`
 
-# Run the development server
-npm run dev
+## Deployment
 
-# Build for production
-npm run build
-```
+This application is configured for deployment on Vercel.
 
-## License
+## Storage
 
-All rights reserved.
+Website data is stored in the browser's localStorage. No server-side database is required.
+
+## Security Notes
+
+- Scripts from cloned websites are removed for security reasons
+- iframes are also removed to prevent potential security issues
+- All external links open in new tabs
